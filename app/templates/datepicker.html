@@ -4,8 +4,8 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('month')" ng-bind="date|mFormat:'YYYY MMMM':tz"></th>
-        <th ng-click="next()">&rsaquo;</i></th>
+        <th colspan="5" class="switch" ng-click="setView('month')" ng-bind="getUnformattedDateHeader()|mFormat:'YYYY MMMM':tz"></th>
+        <th ng-click="next()">&rsaquo;</th>
       </tr>
       <tr>
         <th ng-repeat="day in weekdays" style="overflow: hidden" ng-bind="day|mFormat:'ddd':tz"></th>
@@ -28,7 +28,7 @@
       <tr>
         <th ng-click="prev(10)">&lsaquo;</th>
         <th colspan="5" class="switch"ng-bind="years[0].year()+' - '+years[years.length-1].year()"></th>
-        <th ng-click="next(10)">&rsaquo;</i></th>
+        <th ng-click="next(10)">&rsaquo;</th>
       </tr>
       </thead>
       <tbody>
@@ -47,8 +47,8 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('year')" ng-bind="date|mFormat:'YYYY':tz"></th>
-        <th ng-click="next()">&rsaquo;</i></th>
+        <th colspan="5" class="switch" ng-click="setView('year')" ng-bind="getUnformattedDateHeader()|mFormat:'YYYY':tz"></th>
+        <th ng-click="next()">&rsaquo;</th>
       </tr>
       </thead>
       <tbody>
@@ -68,8 +68,8 @@
       <thead>
       <tr>
         <th ng-click="prev(24)">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('date')" ng-bind="date|mFormat:'DD MMMM YYYY':tz"></th>
-        <th ng-click="next(24)">&rsaquo;</i></th>
+        <th colspan="5" class="switch" ng-click="setView('date')" ng-bind="getUnformattedDateHeader()|mFormat:'DD MMMM YYYY':tz"></th>
+        <th ng-click="next(24)">&rsaquo;</th>
       </tr>
       </thead>
       <tbody>
@@ -88,8 +88,8 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('hours')" ng-bind="date|mFormat:'DD MMMM YYYY':tz"></th>
-        <th ng-click="next()">&rsaquo;</i></th>
+        <th colspan="5" class="switch" ng-click="setView('hours')" ng-bind="getUnformattedDateHeader()|mFormat:'DD MMMM YYYY':tz"></th>
+        <th ng-click="next()">&rsaquo;</th>
       </tr>
       </thead>
       <tbody>

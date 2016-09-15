@@ -94,6 +94,15 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
       scope.callbackOnSetDate = attrs.dateChange ? datePickerUtils.findFunction(scope, attrs.dateChange) : undefined;
 
+      scope.getUnformattedDateHeader = function() {
+        var dateToFormat = scope.now;
+        if (scope.date && angular.isDate(scope.date)) {
+          dateToFormat = scope.date;
+        }
+        return dateToFormat;
+      };
+
+
       prepareViews();
 
       scope.setView = function (nextView) {
