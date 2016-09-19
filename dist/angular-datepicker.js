@@ -10,13 +10,13 @@ Module.constant('datePickerConfig', {
     month: 'month',
     date: 'day',
     hours: 'hours',
-    minutes: 'minutes',
+    minutes: 'minutes'
   },
   viewConfig: {
     year: ['years', 'isSameYear'],
     month: ['months', 'isSameMonth'],
     hours: ['hours', 'isSameHour'],
-    minutes: ['minutes', 'isSameMinutes'],
+    minutes: ['minutes', 'isSameMinutes']
   },
   step: 5
 });
@@ -95,9 +95,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.callbackOnSetDate = attrs.dateChange ? datePickerUtils.findFunction(scope, attrs.dateChange) : undefined;
 
       scope.getUnformattedDateHeader = function() {
-        var dateToFormat = scope.now;
-        if (scope.date && angular.isDate(scope.date)) {
-          dateToFormat = scope.date;
+        var dateToFormat = scope.date;
+        if (!dateToFormat || (dateToFormat && !dateToFormat.isValid())) {
+          dateToFormat = scope.now;
+          scope.date = dateToFormat;
         }
         return dateToFormat;
       };
