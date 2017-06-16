@@ -204,6 +204,22 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         });
       }
 
+      function inRange(date) {
+        if (scope.$parent.start && scope.$parent.end) {
+          var rangeStart = createMoment(scope.$parent.start).startOf('day');
+          var rangeEnd = createMoment(scope.$parent.end).startOf('day');
+          var dateClone = date.clone().startOf('day');
+
+          return {
+            inRange: rangeStart.unix() <= dateClone.unix() && rangeEnd.unix() >= dateClone.unix(),
+            isStart: rangeStart.unix() === dateClone.unix(),
+            isEnd: rangeEnd.unix() === dateClone.unix()
+          };
+        }
+
+        return null;
+      }
+
       prepareViewData = function () {
         var view = scope.view,
           date = scope.date,
@@ -229,6 +245,22 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
               if (week[j].month() !== date.month() || !inValidRange(week[j])) {
                 classList += ' disabled';
               }
+
+              var isDateInRange = inRange(week[j]);
+              if (isDateInRange) {
+                if (isDateInRange.inRange) {
+                  classList += ' in-range';
+                }
+
+                if (isDateInRange.isStart) {
+                  classList += ' range-start';
+                }
+
+                if (isDateInRange.isEnd) {
+                  classList += ' range-end';
+                }
+              }
+
               classes[i].push(classList);
             }
           }
@@ -716,6 +748,7 @@ Module.constant('dateTimeConfig', {
       (attrs.ngModel ? 'ng-model="' + attrs.ngModel + '" ' : '') +
       (attrs.firstDay ? 'first-day="' + attrs.firstDay + '" ' : '') +
       (attrs.timezone ? 'timezone="' + attrs.timezone + '" ' : '') +
+      (attrs.range ? 'range="' + attrs.range + '" ' : '') +
       'class="date-picker-date-time"></div>';
   },
   format: 'YYYY-MM-DD HH:mm',
@@ -955,7 +988,8 @@ $templateCache.put('templates/datepicker.html',
     "      <thead>\n" +
     "      <tr>\n" +
     "        <th ng-click=\"prev()\">&lsaquo;</th>\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('month')\" ng-bind=\"getUnformattedDateHeader()|mFormat:'YYYY MMMM':tz\"></th>\n" +
+    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('month')\"\n" +
+    "            ng-bind=\"getUnformattedDateHeader()|mFormat:'YYYY MMMM':tz\"></th>\n" +
     "        <th ng-click=\"next()\">&rsaquo;</th>\n" +
     "      </tr>\n" +
     "      <tr>\n" +
@@ -967,7 +1001,9 @@ $templateCache.put('templates/datepicker.html',
     "        <td ng-repeat=\"day in week\">\n" +
     "          <span\n" +
     "            ng-class=\"classes[$index2][$index]\"\n" +
-    "            ng-click=\"selectDate(day)\" ng-bind=\"day|mFormat:'DD':tz\"></span>\n" +
+    "            ng-click=\"selectDate(day)\"\n" +
+    "            ng-bind=\"day|mFormat:'DD':tz\">\n" +
+    "          </span>\n" +
     "        </td>\n" +
     "      </tr>\n" +
     "      </tbody>\n" +
@@ -978,7 +1014,7 @@ $templateCache.put('templates/datepicker.html',
     "      <thead>\n" +
     "      <tr>\n" +
     "        <th ng-click=\"prev(10)\">&lsaquo;</th>\n" +
-    "        <th colspan=\"5\" class=\"switch\"ng-bind=\"years[0].year()+' - '+years[years.length-1].year()\"></th>\n" +
+    "        <th colspan=\"5\" class=\"switch\" ng-bind=\"years[0].year()+' - '+years[years.length-1].year()\"></th>\n" +
     "        <th ng-click=\"next(10)\">&rsaquo;</th>\n" +
     "      </tr>\n" +
     "      </thead>\n" +
@@ -998,7 +1034,8 @@ $templateCache.put('templates/datepicker.html',
     "      <thead>\n" +
     "      <tr>\n" +
     "        <th ng-click=\"prev()\">&lsaquo;</th>\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('year')\" ng-bind=\"getUnformattedDateHeader()|mFormat:'YYYY':tz\"></th>\n" +
+    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('year')\"\n" +
+    "            ng-bind=\"getUnformattedDateHeader()|mFormat:'YYYY':tz\"></th>\n" +
     "        <th ng-click=\"next()\">&rsaquo;</th>\n" +
     "      </tr>\n" +
     "      </thead>\n" +
@@ -1019,7 +1056,8 @@ $templateCache.put('templates/datepicker.html',
     "      <thead>\n" +
     "      <tr>\n" +
     "        <th ng-click=\"prev(24)\">&lsaquo;</th>\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('date')\" ng-bind=\"getUnformattedDateHeader()|mFormat:'DD MMMM YYYY':tz\"></th>\n" +
+    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('date')\"\n" +
+    "            ng-bind=\"getUnformattedDateHeader()|mFormat:'DD MMMM YYYY':tz\"></th>\n" +
     "        <th ng-click=\"next(24)\">&rsaquo;</th>\n" +
     "      </tr>\n" +
     "      </thead>\n" +
@@ -1039,7 +1077,8 @@ $templateCache.put('templates/datepicker.html',
     "      <thead>\n" +
     "      <tr>\n" +
     "        <th ng-click=\"prev()\">&lsaquo;</th>\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('hours')\" ng-bind=\"getUnformattedDateHeader()|mFormat:'DD MMMM YYYY':tz\"></th>\n" +
+    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('hours')\"\n" +
+    "            ng-bind=\"getUnformattedDateHeader()|mFormat:'DD MMMM YYYY':tz\"></th>\n" +
     "        <th ng-click=\"next()\">&rsaquo;</th>\n" +
     "      </tr>\n" +
     "      </thead>\n" +

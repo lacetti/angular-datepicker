@@ -204,6 +204,22 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         });
       }
 
+      function inRange(date) {
+        if (scope.$parent.start && scope.$parent.end) {
+          var rangeStart = createMoment(scope.$parent.start).startOf('day');
+          var rangeEnd = createMoment(scope.$parent.end).startOf('day');
+          var dateClone = date.clone().startOf('day');
+
+          return {
+            inRange: rangeStart.unix() <= dateClone.unix() && rangeEnd.unix() >= dateClone.unix(),
+            isStart: rangeStart.unix() === dateClone.unix(),
+            isEnd: rangeEnd.unix() === dateClone.unix()
+          };
+        }
+
+        return null;
+      }
+
       prepareViewData = function () {
         var view = scope.view,
           date = scope.date,
@@ -229,6 +245,22 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
               if (week[j].month() !== date.month() || !inValidRange(week[j])) {
                 classList += ' disabled';
               }
+
+              var isDateInRange = inRange(week[j]);
+              if (isDateInRange) {
+                if (isDateInRange.inRange) {
+                  classList += ' in-range';
+                }
+
+                if (isDateInRange.isStart) {
+                  classList += ' range-start';
+                }
+
+                if (isDateInRange.isEnd) {
+                  classList += ' range-end';
+                }
+              }
+
               classes[i].push(classList);
             }
           }
